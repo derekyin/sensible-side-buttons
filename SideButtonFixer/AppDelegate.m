@@ -20,12 +20,14 @@
 //
 
 #import "AppDelegate.h"
-#import "TouchEvents.h"
+#import "../External/TouchEvents.h"
 
 static NSMutableDictionary<NSNumber*, NSArray<NSDictionary*>*>* swipeInfo = nil;
 static NSArray* nullArray = nil;
 
 static void SBFFakeSwipe(TLInfoSwipeDirection dir) {
+    printf("%d", dir);
+//    printf("%d", swipeInfo[@(dir)][0]);
     CGEventRef event1 = tl_CGEventCreateFromGesture((__bridge CFDictionaryRef)(swipeInfo[@(dir)][0]), (__bridge CFArrayRef)nullArray);
     CGEventRef event2 = tl_CGEventCreateFromGesture((__bridge CFDictionaryRef)(swipeInfo[@(dir)][1]), (__bridge CFArrayRef)nullArray);
     
@@ -47,12 +49,65 @@ static CGEventRef SBFMouseCallback(CGEventTapProxy proxy, CGEventType type, CGEv
         if ((mouseDown && down) || (!mouseDown && !down)) {
             SBFFakeSwipe(kTLInfoSwipeLeft);
         }
-        
         return NULL;
     }
-    else if (number == (swapButtons ? 3 : 4)) {
+    
+    if (number == (swapButtons ? 3 : 4)) {
         if ((mouseDown && down) || (!mouseDown && !down)) {
-            SBFFakeSwipe(kTLInfoSwipeRight);
+//            SBFFakeSwipe(kTLInfoSwipeRight);
+            
+//            CGEventRef kbUpUp, kbCtrlUp, kbUpDown, kbCtrlDown;
+//
+//            kbCtrlUp = CGEventCreateKeyboardEvent (NULL, (CGKeyCode)59, true);
+//            CGEventPost(kCGHIDEventTap, kbCtrlUp);
+//            CFRelease(kbCtrlUp);
+//
+//            kbUpUp = CGEventCreateKeyboardEvent (NULL, (CGKeyCode)126, true);
+//            CGEventPost(kCGHIDEventTap, kbUpUp);
+//            CFRelease(kbUpUp);
+//
+//
+//            kbUpDown = CGEventCreateKeyboardEvent (NULL, (CGKeyCode)126, false);
+//            CGEventPost(kCGHIDEventTap, kbUpDown);
+//            CFRelease(kbUpDown);
+//
+//            kbCtrlDown = CGEventCreateKeyboardEvent (NULL, (CGKeyCode)59, false);
+//            CGEventPost(kCGHIDEventTap, kbCtrlDown);
+//            CFRelease(kbCtrlDown);
+
+            // Hold the Command key
+            CGEventSourceRef source;
+            CGEventRef event;
+            source = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
+            event = CGEventCreateKeyboardEvent(source, (CGKeyCode)55, true);
+            CGEventSetIntegerValueField(event, kCGKeyboardEventAutorepeat, 1);
+            CGEventPost(kCGHIDEventTap, event);
+            
+            // Press Tab key once
+            CGEventSourceRef upsource;
+            CGEventRef keyDown, keyUp;
+        
+            upsource = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
+            keyDown = CGEventCreateKeyboardEvent(upsource, (CGKeyCode)48, true);
+            CGEventSetFlags(keyDown, kCGEventFlagMaskCommand);
+            CGEventPost(kCGHIDEventTap, keyDown);
+            keyUp = CGEventCreateKeyboardEvent(upsource, (CGKeyCode)48, true);
+            CGEventSetFlags(keyUp, kCGEventFlagMaskCommand);
+            CGEventPost(kCGHIDEventTap, keyUp);
+
+            
+            
+//            let source = CGEventSourceCreate(.HIDSystemState)
+//            let keyDown = CGEventCreateKeyboardEvent(source, 48 as CGKeyCode, true)
+//            CGEventSetFlags(keyDown, .MaskCommand)
+//            CGEventPost(.CGHIDEventTap, keyDown)
+//            let keyUp = CGEventCreateKeyboardEvent(source, 48 as CGKeyCode, false)
+//            CGEventPost(.CGHIDEventTap, keyUp)
+            
+//            ctrl = CGEventCreateKeyboardEvent (NULL, (CGKeyCode)1, true);
+//            keyup = CGEventCreateKeyboardEvent (NULL, (CGKeyCode)2, true);
+           
+            printf("mission control up");
         }
         
         return NULL;
@@ -80,7 +135,7 @@ typedef NS_ENUM(NSInteger, MenuItem) {
     MenuItemAboutText,
     MenuItemAboutSeparator,
     MenuItemDonate,
-    MenuItemWebsite,
+//    MenuItemWebsite,
     MenuItemAccessibility,
     MenuItemLinkSeparator,
     MenuItemQuit
@@ -210,8 +265,8 @@ typedef NS_ENUM(NSInteger, MenuItem) {
         [menu addItem:[[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%@ Website", appName] action:@selector(donate:) keyEquivalent:@""]];
         assert(menu.itemArray.count - 1 == MenuItemDonate);
         
-        [menu addItem:[[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%@ Website", appName] action:@selector(website:) keyEquivalent:@""]];
-        assert(menu.itemArray.count - 1 == MenuItemWebsite);
+//        [menu addItem:[[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%@ Website", appName] action:@selector(website:) keyEquivalent:@""]];
+//        assert(menu.itemArray.count - 1 == MenuItemWebsite);
         
         [menu addItem:[[NSMenuItem alloc] initWithTitle:@"Open Accessibility Whitelist" action:@selector(accessibility:) keyEquivalent:@""]];
         assert(menu.itemArray.count - 1 == MenuItemAccessibility);
@@ -270,7 +325,7 @@ typedef NS_ENUM(NSInteger, MenuItem) {
             self.statusItem.menu.itemArray[MenuItemTriggerOnMouseDown].enabled = NO;
             self.statusItem.menu.itemArray[MenuItemSwapButtons].enabled = NO;
             self.statusItem.menu.itemArray[MenuItemDonate].hidden = YES;
-            self.statusItem.menu.itemArray[MenuItemWebsite].hidden = NO;
+//            self.statusItem.menu.itemArray[MenuItemWebsite].hidden = NO;
             self.statusItem.menu.itemArray[MenuItemAccessibility].hidden = NO;
             break;
         case MenuModeDonation:
@@ -278,7 +333,7 @@ typedef NS_ENUM(NSInteger, MenuItem) {
             self.statusItem.menu.itemArray[MenuItemTriggerOnMouseDown].enabled = YES;
             self.statusItem.menu.itemArray[MenuItemSwapButtons].enabled = YES;
             self.statusItem.menu.itemArray[MenuItemDonate].hidden = NO;
-            self.statusItem.menu.itemArray[MenuItemWebsite].hidden = YES;
+//            self.statusItem.menu.itemArray[MenuItemWebsite].hidden = YES;
             self.statusItem.menu.itemArray[MenuItemAccessibility].hidden = YES;
             break;
         case MenuModeNormal:
@@ -286,7 +341,7 @@ typedef NS_ENUM(NSInteger, MenuItem) {
             self.statusItem.menu.itemArray[MenuItemTriggerOnMouseDown].enabled = YES;
             self.statusItem.menu.itemArray[MenuItemSwapButtons].enabled = YES;
             self.statusItem.menu.itemArray[MenuItemDonate].hidden = YES;
-            self.statusItem.menu.itemArray[MenuItemWebsite].hidden = NO;
+//            self.statusItem.menu.itemArray[MenuItemWebsite].hidden = NO;
             self.statusItem.menu.itemArray[MenuItemAccessibility].hidden = YES;
             break;
     }
@@ -446,7 +501,7 @@ typedef NS_ENUM(NSInteger, MenuItem) {
     
     NSString* appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleNameKey];
     NSString* appDescription = [NSString stringWithFormat:@"%@ %@", appName, [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
-    NSString* copyright = @"Copyright © 2018 Alexei Baboulevitch.";
+//    NSString* copyright = @"Copyright © 2018 Alexei Baboulevitch.";
     
     switch (menuMode) {
         case MenuModeAccessibility: {
@@ -456,7 +511,7 @@ typedef NS_ENUM(NSInteger, MenuItem) {
             [string addAttribute:NSFontAttributeName value:boldFont range:[text rangeOfString:appDescription]];
             [string appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n" attributes:regularAttributes]];
             [string appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n" attributes:smallReturnAttributes]];
-            [string appendAttributedString:[[NSAttributedString alloc] initWithString:copyright attributes:regularAttributes]];
+//            [string appendAttributedString:[[NSAttributedString alloc] initWithString:copyright attributes:regularAttributes]];
             
             [self.text.textStorage setAttributedString:string];
         } break;
@@ -467,18 +522,18 @@ typedef NS_ENUM(NSInteger, MenuItem) {
             [string addAttribute:NSFontAttributeName value:boldFont range:[text rangeOfString:appDescription]];
             [string appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n" attributes:regularAttributes]];
             [string appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n" attributes:smallReturnAttributes]];
-            [string appendAttributedString:[[NSAttributedString alloc] initWithString:copyright attributes:regularAttributes]];
+//            [string appendAttributedString:[[NSAttributedString alloc] initWithString:copyright attributes:regularAttributes]];
             
             [self.text.textStorage setAttributedString:string];
         } break;
         case MenuModeNormal: {
-            NSString* text = [NSString stringWithFormat:@"Thanks for using %@!", appDescription];
+            NSString* text = [NSString stringWithFormat:@"my fork"];
             
             NSMutableAttributedString* string = [[NSMutableAttributedString alloc] initWithString:text attributes:regularAttributes];
             [string addAttribute:NSFontAttributeName value:boldFont range:[text rangeOfString:appDescription]];
             [string appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n" attributes:regularAttributes]];
             [string appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n" attributes:smallReturnAttributes]];
-            [string appendAttributedString:[[NSAttributedString alloc] initWithString:copyright attributes:regularAttributes]];
+//            [string appendAttributedString:[[NSAttributedString alloc] initWithString:copyright attributes:regularAttributes]];
             
             [self.text.textStorage setAttributedString:string];
         } break;

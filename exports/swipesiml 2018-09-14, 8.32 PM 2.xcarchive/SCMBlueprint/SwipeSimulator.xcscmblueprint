@@ -1,0 +1,26 @@
+{
+  "DVTSourceControlWorkspaceBlueprintLocationsKey" : {
+    "8D75150A3A74476AF3B8EA4C80DF780FAF4A0E7B" : {
+      "DVTSourceControlBranchIdentifierKey" : "master",
+      "DVTSourceControlLocationRevisionKey" : "4c1e946615356dc9cf50b414bfdec852762e7f2d",
+      "DVTSourceControlBranchOptionsKey" : 4,
+      "DVTSourceControlBranchRemoteNameKey" : "origin",
+      "DVTSourceControlWorkspaceBlueprintLocationTypeKey" : "DVTSourceControlBranch"
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "8D75150A3A74476AF3B8EA4C80DF780FAF4A0E7B",
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "98649BE4-382E-4307-A246-DDF3EFE2980E",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "8D75150A3A74476AF3B8EA4C80DF780FAF4A0E7B" : "sensible-side-buttons\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "SwipeSimulator",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "SwipeSimulator.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/derekyin\/sensible-side-buttons.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "8D75150A3A74476AF3B8EA4C80DF780FAF4A0E7B"
+    }
+  ]
+}
